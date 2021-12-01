@@ -1,0 +1,38 @@
+<html>
+
+<head>
+  <title>Printing over HTTP - attaching pdf from uri as formdata </title>
+</head>
+
+<body>
+  <h2>Enter information below</h2>
+  <div>
+    Printer IP Address: <br>
+    <input type="text" id="ip_addr" style="width:300px"><br><br>
+    <button onclick="sendPdfFileFromUri()">Print PDF from uri as form data</button>
+  </div>
+  <div id="output"></div>
+  <script>
+    function sendPdfFileFromUri() {
+      const pdfData = {
+        uri: "./assets/label.pdf",
+        type: "application/pdf",
+        name: "label",
+      };
+      const data = new FormData();
+      data.append("pdf", pdfData);
+      const ipAddr = document.querySelector("#ip_addr").value || "127.0.0.1:9100";
+      const printApi = "printer/pstprnt";
+      const url = `http://${ipAddr}/${printApi}`;
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: pdfData,
+      });
+    }
+  </script>
+</body>
+
+</html>
